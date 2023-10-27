@@ -6,7 +6,7 @@
 
 % Este comando, o primeiro do documento, importa a classe a usar. Cada
 % documento só pode ter uma classe.
-\documentclass[portuguese]{ist-thesis}
+\documentclass[english]{ist-thesis}
 
 % Entre 'documentclass' e 'begin{document}' encontra-se o 'preamble', ou
 % a secção de código para importar packages e estabelecer configurações
@@ -133,15 +133,15 @@ There are two extra, but fundamental requirements: the whole board shouldn't cos
 
 It's important to keep a balance between the power consumption: the time the board lasts, the functionality, and the cost. The goal isn't to make a board that can run the most high-end games, if it is expensive and the battery runs out too fast. The opposite is also applicable, a board that lasts a lot of time, but doesn't give the user a good experience doesn't meet the requirements. So, the objective is to find a medium point, where some compromises are made in order to keep an overall balance and all requirements are met.  
 
-\part{Introdução Teórica}
+%\part{Introdução Teórica}
 
-\chapter{Primeiro Capítulo}
+\chapter{Solutions}
 
 \section{Similar projects}
 
 It is crucial to recognize and analyze some of the current badges that have served as the foundation for this study as we delve into the world of electronic badges. These earlier badges serve as illustrations of comparable field implementations, offering insightful comparisons and standards against which our badge can be evaluated. 
 
-The first notable example is a badge built for Hacker Hotel, an annual technology and hacker conference that takes place in the Netherlands. For the 2023 edition, they designed a puzzle game in the board intended to entertain the visitors, taking them around the venue where the event took place, and to find clues to an eventual solution. The badge has a row of push buttons for users to input the binary codes of each clue. It uses an RP2040 microcontroller is powered by a CR2032 coin cell. 
+The first notable example is a badge built for Hacker Hotel, an annual technology and hacker conference that takes place in the Netherlands. For the 2023 edition, they designed a puzzle game in the board intended to entertain the visitors, taking them around the venue where the event took place, and to find clues to an eventual solution. The badge has a row of push buttons for users to input the binary codes of each clue. It uses an RP2040 microcontroller is powered by a CR2032 coin cell. One drawback of this badge is that it only has utilty for the Hacker Hotel event, not anything beyond. 
 
 \begin{figure}[ht]
 	\centering
@@ -150,17 +150,39 @@ The first notable example is a badge built for Hacker Hotel, an annual technolog
 	\label{fig:hacker_hotel}
 \end{figure}
 
-One drawback of this badge is that it only has utilty for the Hacker Hotel event, not anything beyond. 
+Another badge worth to be looked at is 
 
-\section{Possible Solutions}
+\begin{center}
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ Component & Quantity & Price \\ 
+ \hline
+ ATtiny85 SOIC-8 chip & 1 & - \\ 
+ \hline
+ I2C OLED Display 128x64px & 1 & - \\ 
+ \hline
+ Slide Switch & 1 & - \\ 
+ \hline
+ CR2032 coin cell & 1 & - \\ 
+ \hline
+ CR2032 holder & 1 & - \\ 
+ \hline
+ 22k resistor & 3 & - \\ 
+ \hline
+ 6mm push button & 3 & - \\ 
+ \hline
+ 6 pin Female headers & 1 & - \\ 
+ \hline
+\end{tabular}
+\end{center}
+
+\section{Proposed Solutions}
 
 As for the input interface, one option is to put four directional arrow buttons, and an additional pair of buttons denoted as "A" and "B," serving as functional equivalents to "OK" and "Cancel. With this type of button interface, the student is allowed to do everything asked in the requirements - see and change personal information, play the treasure hunt game, and the normal games. 
 
-\section{Energy saving}
+\section{Communication Protocols}
 
-
-
-\section{SPI Protocol}
+\subsection{SPI Protocol}
 
 The Serial Peripheral Interface (SPI) works by using 4 lines:
 
@@ -180,7 +202,7 @@ The Serial Peripheral Interface (SPI) works by using 4 lines:
 
 The communication starts with the master assigning a slave to send data to. It does that by setting the SS/CS line to low. When it is  in idle mode, not transmitting, the line is set to high. Then the master sends the clock signal to synchronize the output of data bits from the master to the sampling of bits by the slave (meaning this is a synchronous communication protocol). In each clock cycle, one bit of data is transmitted, so the speed of the communication is determined by the clock frequency. The data sent from the master to the slave is transmitted trough the MOSI line, and it is usually sent with the most significant bit first. In the MISO line, the data is sent from the slave to the master, and usually with the least significant bit first. After the data transfer, the master changes the state of the SS/CS line, indicating the end of the communication with a particular slave. 
 
-\section{I2C Protocol}
+\subsection{I2C Protocol}
 
 Unlike the SPI protocol, the I2C (Inter-Integrated Circuit) protocol works using only 2 lines:
 
@@ -206,7 +228,7 @@ The devices both transmit and receive data in the same line, the SDA. The data i
 	\label{fig:i2c}
 \end{figure}
 
-\section{UART}
+\subsection{UART}
 
 The UART (Universal Asynchronous Receiver/Transmitter) is not a communication protocol, unlike SPI and I2C, it is a physical circuit in a microcontroller whose purpose is to transmit and receive data. 
 
@@ -235,7 +257,7 @@ The UART data packet is composed of:
     \item \textbf{Stop bit} - The UART transmitting device pulls the line from high to low for at least two bits
 \end{itemize}
 
-\section{SPI vs I2C vs UART}
+\subsection{SPI vs I2C vs UART}
 
 Both protocols have their advantages and disadvantages, which are important to consider. I2C is simpler in terms of wiring because it only uses 2 lines, unlike SPI which uses 4. However, this works in favor of the SPI protocol, because the MOSI and MISO lines enable the devices to receive and transmit data at the same time. 
 Regarding slave addressing, the SPI protocol has a specific line for it, which makes it easier than sending the slave address in each message (even though in SPI, if multiple slaves are used, the master needs to have a different SS/CS pin for each one). SPI only supports one master, while I2C can have multiple master. 
@@ -278,6 +300,10 @@ The way they work is by utilizing a thin film of micro-capsules backed by an ele
 	\end{tabular}
 	\label{tab:displays}
 \end{table}
+
+\section{Energy saving}
+
+\chapter{Thesis work planning}
 
 \section{Primeira Secção}
 
