@@ -128,10 +128,16 @@ struct Blackboard {
 Blackboard bb;
 
 void ReadAndProcessKeyStatus();
-void Print_KeyStatus(uint8_t KeyPressed);
+void Key_Instrucion(uint8_t KeyPressed);
 uint8_t Read_SettingRegisters(uint8_t Register);
 void Write_SettingRegisters();
+
 void DisplayStartupSequence(); 
+void navigate_up();
+void navigate_down();
+void exit_submenu();
+void select_submenu_option();
+void update_display();
 
 int main() 
 {
@@ -164,13 +170,13 @@ void ReadAndProcessKeyStatus() {
 
   if (bb.KeyStatus0 != 0) {
     digitalWrite(LED_BUILTIN, HIGH);
-    Print_KeyStatus(bb.KeyStatus0);
+    Key_Instrucion(bb.KeyStatus0);
   } else {
     digitalWrite(LED_BUILTIN, LOW);
   }
 }
 
-void Print_KeyStatus(uint8_t KeyPressed) {
+void Key_Instrucion(uint8_t KeyPressed) {
   oled.clear();
   oled.home();
   
