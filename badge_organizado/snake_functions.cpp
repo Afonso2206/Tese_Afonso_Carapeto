@@ -120,3 +120,36 @@ void resetGame(){
   scoreStr = String(score);
   tps = 10;
 }
+
+void run_snake_game(){
+  initialize();
+  newApple();
+  back_key_pressed = false;
+  while(!back_key_pressed){
+    if (ydir == 0) {                             //if snake is going left/right:
+      if (KeyStatus0 & 0x04) {              //go down
+        xdir = 0;
+        ydir = 1;                                                                                                     
+      }
+      if (KeyStatus0 & 0x02) {              //go up
+        xdir = 0;
+        ydir = -1;
+      }
+      } else {                                     //if snake is going up/down:
+          if (KeyStatus0 & 0x08) {              //go right
+            xdir = 1;
+            ydir = 0;
+          }
+          if (KeyStatus0 & 0x01) {              //go left
+            xdir = -1;
+            ydir = 0;
+          }
+      }
+      snake_game(xdir, ydir);
+      ReadAndProcessKeyStatus();
+  }
+  resetGame();
+  Snake_Game = false;
+  back_key_pressed = false;
+  delay(100);
+}

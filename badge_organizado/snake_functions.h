@@ -21,6 +21,14 @@ extern int sy;
 extern String scoreStr;    //player score as string
 extern double tps;          //snake speed in tiles per second
 
+extern bool Snake_Game;
+extern bool back_key_pressed;
+extern uint8_t KeyStatus0;
+
+
+extern void ReadAndProcessKeyStatus(); 
+
+
 void snake_game(int xdir, int ydir);
 
 void initialize();
@@ -36,5 +44,7 @@ void displayScore();
 void gameOver();
 
 void resetGame();
+
+void run_snake_game();
 
 #endif

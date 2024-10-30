@@ -4,16 +4,16 @@ const char* menu_items[6] = {
     "Student Data",
     "Games",
     "Voltmeter",
-    "I2C Explorer",
+    "Treasure Hunt",
     "Focus Attention",
     "IST Info"
   };
 
-const char* submenu_items[6][4] = {
-  {"See student data", "Show QR Code", "test", nullptr},      // Submenu options for Student Data
-  {"Snake", "Game 2", nullptr},            // Submenu options for Games
+const char* submenu_items[6][3] = {
+  {"See student data", "Show QR Code", nullptr},      // Submenu options for Student Data
+  {"Snake", "Tic Tac Toe", nullptr},            // Submenu options for Games
   {"Digital", "Analog", nullptr},    // Submenu options for Voltmeter
-  {"I2C Explorer 1", "I2C Explorer 2", nullptr},  // Submenu options for I2C Explorer
+  {"Treasure Hunt", nullptr},  // Submenu options for I2C Explorer
   {"Focus Attention", nullptr},  // Submenu options for Focus Attention
   {"IST Alameda", "IST Taguspark", nullptr}       // Submenu options for IST Info
 };
@@ -111,7 +111,7 @@ void DisplayStartupSequence() {
     oled.clear();
     oled.drawBitmap(0, 0, IST_Logo, 128, 64);
     oled.update();
-    delay(1000); 
+    delay(2000); 
 }
 
 //---------------------------------------------------------------------------------------------------//
@@ -241,9 +241,11 @@ void digital_Voltmeter(){
   float voltage = (ADC_Value / 1023.0) * 3.3;
   oled.clear();
   oled.home();
+  oled.setScale(2);
   oled.print(voltage);
   oled.print("V");
   oled.update();
+  oled.setScale(1);
   
 }
 

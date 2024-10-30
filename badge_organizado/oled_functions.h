@@ -9,7 +9,7 @@
 extern GyverOLED<SSH1106_128x64> oled;
 
 extern const char* menu_items[6];
-extern const char* submenu_items[6][4];
+extern const char* submenu_items[6][3];
 extern const int menu_length;
 extern int current_index;
 extern int current_submenu_index;

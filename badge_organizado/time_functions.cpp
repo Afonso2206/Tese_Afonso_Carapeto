@@ -9,12 +9,15 @@ bool                    longSleep;                //!< last sleep interval; 0 - 
 time_t                  rtcLastClockSync;         //!< timestamp of last RTC synchonization to network time
 bool                    wokeUp;                   //!< flag to indicate if woke up from sleep
 
+int IRQ_PIN = 13;
+
 ESP32Time rtc;
 
 void clock_and_rtc_initialization(){
 
     set_sys_clock_khz(24000, true);
     rtc_init();
+    pinMode(IRQ_PIN,INPUT);
 
     // Restore variables and RTC after reset 
     time_t time_saved = watchdog_hw->scratch[0];
@@ -35,15 +38,15 @@ void clock_and_rtc_initialization(){
 }
 
 void prepareSleep(void) {
-    unsigned long sleep_interval = 10;  // Fixed sleep interval of 10 seconds
     
     oled.clear();
     oled.setCursor(0, 0);
-    oled.print("Sleeping for ");
-    oled.print(sleep_interval);
-    oled.print(" s\n");
+    oled.println("Going to sleep");
+    oled.println(" ");
+    oled.println("Press any key twice");
+    oled.println("to wake me up!");
     oled.update();
-    delay(2000);
+    delay(5000);
     oled.setPower(false);
 
     wokeUp = true;  // Set the flag to indicate the device will wake up
@@ -54,7 +57,9 @@ void prepareSleep(void) {
         epoch_to_datetime(&t_now, &dt);
         rtc_set_datetime(&dt);
         sleep_us(64);
-        pico_sleep(sleep_interval);
+        sleep_run_from_rosc();
+        sleep_goto_dormant_until_edge_high(IRQ_PIN);
+        //pico_sleep(sleep_interval);
 
         // Save variables to be retained after reset
         watchdog_hw->scratch[2] = rtcLastClockSync;

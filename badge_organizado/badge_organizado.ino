@@ -4,6 +4,10 @@
 
 #include "time_functions.h"
 
+#include "treasure_hunt_functions.h"
+
+#include "tic_tac_toe.h"
+
 #include <Wire.h>
 
 #define SLAVE_ADDRESS 0x50 //   Touch Key Controller Address
@@ -18,6 +22,7 @@ const unsigned long inactivityTimeout = 10000;
 //--------------------------------TOUCH KEY CONTROLLER VARIABLES-----------------------------//
 uint8_t KeyStatus0, i; 
 uint8_t Array_SettingRegisters[22];
+bool back_key_pressed = false;
 
 //---------------------------------------SNAKE GAME VARIABLES----------------------------------------//
 
@@ -25,9 +30,13 @@ bool Snake_Game = false;
 int xdir = 1;             //player direction
 int ydir = 0;
 
-//---------------------------------------TOUCH KEY VARIABLES----------------------------------------//
+//---------------------------------------TIC TAC TOE VARIABLES----------------------------------------//
 
-bool back_key_pressed = false;
+bool tic_tac_toe_game = false;
+
+//---------------------------------------TIC TAC TOE VARIABLES----------------------------------------//
+
+bool treasure_hunt = false;
 
 //--------------------------------------------------------------------------------------------------//
 //--------------------------------------------------------------------------------------------------//
@@ -47,7 +56,8 @@ void select_submenu_option();
 
 int main() {
 
-    clock_and_rtc_initialization();       
+    clock_and_rtc_initialization();    
+     
 
     //I2c Communication Intialization
     Wire.begin();
@@ -66,7 +76,7 @@ int main() {
 
     //Main Loop
     while (true) {
-        unsigned long currentTime = millis();         //Checks to see if there if 10 seconds pass without a key being pressed
+        unsigned long currentTime = millis();         //Checks to see if 10 seconds pass without a key being pressed
         if (KeyStatus0 != 0){
           lastActivityTime = currentTime;
         }
@@ -101,7 +111,7 @@ void Key_Instruction(uint8_t KeyPressed) {
   oled.clear();
   oled.home();
 
-  if(!Snake_Game){
+  if(!Snake_Game && !tic_tac_toe_game && !treasure_hunt){               //Menu Navigation
     switch (KeyPressed) {
       case 0x01:
         //oled.println("LEFT");    //Presses "LEFT"
@@ -227,36 +237,11 @@ void select_submenu_option() {
   }
   else if (option == "Snake"){
     Snake_Game = true;
-    initialize();
-    newApple();
-    back_key_pressed = false;
-    while(!back_key_pressed){
-      if (ydir == 0) {                             //if snake is going left/right:
-        if (KeyStatus0 & 0x04) {              //go down
-          xdir = 0;
-          ydir = 1;
-        }
-        if (KeyStatus0 & 0x02) {              //go up
-          xdir = 0;
-          ydir = -1;
-        }
-        } else {                                     //if snake is going up/down:
-            if (KeyStatus0 & 0x08) {              //go right
-              xdir = 1;
-              ydir = 0;
-            }
-            if (KeyStatus0 & 0x01) {              //go left
-              xdir = -1;
-              ydir = 0;
-            }
-        }
-        snake_game(xdir, ydir);
-        ReadAndProcessKeyStatus();
-    }
-    resetGame();
-    Snake_Game = false;
-    back_key_pressed = false;
-    delay(100);
+    run_snake_game();
+  }
+  else if (option == "Tic Tac Toe"){
+    tic_tac_toe_game = true;
+    run_tic_tac_toe();
   }
   else if (option == "Digital"){
     delay(100);
@@ -278,6 +263,13 @@ void select_submenu_option() {
     }
     back_key_pressed = false;
   }
+  else if (option == "Treasure Hunt"){    //Treasure Hunt Game
+    treasure_hunt = true;
+    run_treasure_hunt();
+    unsigned long currentTime = millis(); 
+    lastActivityTime = currentTime;
+  }
+  
   else if (option == "Focus Attention"){
     Focus_Preparation();                  //Prints information before starting the Focus Attention Functionality
     back_key_pressed = false;
