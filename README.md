@@ -1,8 +1,9 @@
-This repository contains the source code, schematic, and PCB layout for the electronic badge developed as part of my thesis project. 
+This repository contains the source code, schematic, and PCB layout for the electronic badge developed as part of the thesis project of Afonso Carapeto. 
+
 
 Getting Started: Reprogramming the E-Badge:
 
-Install the Arduino IDE: If you haven't already, download and install the Arduino IDE, which is available at https://www.arduino.cc/en/software.
+- Install the Arduino IDE: If you haven't already, download and install the Arduino IDE, which is available at https://www.arduino.cc/en/software.
 
 Add Raspberry Pi Pico Support: In the Arduino IDE, you’ll need to add support for the Raspberry Pi Pico board (the microcontroller used in this badge). Follow these steps:
 - Open the Arduino IDE and go to File > Preferences.
